@@ -1,7 +1,8 @@
 package com.imilkaeu.sprcrp;
 
-import com.imilkaeu.sprcrp.models.Text;
-import com.imilkaeu.sprcrp.repos.TextRepository;
+import com.imilkaeu.sprcrp.models.Greeting;
+import com.imilkaeu.sprcrp.models.Sentence;
+import com.imilkaeu.sprcrp.repos.SentenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,17 +22,23 @@ public class GreetingController {
     private final AtomicLong counter = new AtomicLong();
 
     @Autowired
-    private TextRepository textRepository;
+    private SentenceRepository sentenceRepository;
 
     @RequestMapping("/greeting")
     public @ResponseBody
-    List<Text> greeting(
+    List<Sentence> greeting(
             @RequestParam(value="name", required=false, defaultValue="World") String name) {
         /*ArrayList<Greeting> greetings = new ArrayList();
         for(int i = 0; i < 10; i++) {
             greetings.add(new Greeting(counter.incrementAndGet(),
                     String.format(template, name + " " + i)));
         }*/
-        return textRepository.findAll();
+        return sentenceRepository.findAll();
+    }
+
+    @RequestMapping("/test")
+    public @ResponseBody
+    Greeting test() {
+        return new Greeting(1, "HELLO");
     }
 }

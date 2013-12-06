@@ -1,7 +1,6 @@
 package com.imilkaeu.sprcrp.models;
 
 import javax.persistence.*;
-import java.sql.Date;
 
 /**
  * Created by imilka on 05.12.13.
@@ -20,7 +19,7 @@ public class Text {
     private String author;
 
     @Basic
-    private Date date;
+    private String textdate;
 
     @Basic
     private String editor;
@@ -58,12 +57,12 @@ public class Text {
         this.author = author;
     }
 
-    public Date getDate() {
-        return date;
+    public String getTextdate() {
+        return textdate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTextdate(String textdate) {
+        this.textdate = textdate;
     }
 
     public String getEditor() {

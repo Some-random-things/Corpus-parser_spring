@@ -38,7 +38,8 @@ public class GreetingController {
 
     @RequestMapping("/test")
     public @ResponseBody
-    Greeting test() {
-        return new Greeting(1, "HELLO");
+    Greeting test(
+            @RequestParam(value="name", required=false, defaultValue="World") String name) {
+        return new Greeting(1, name);
     }
 }

@@ -7,22 +7,22 @@ import java.util.List;
  * Created by imilka on 10.12.13.
  */
 public class BigramInputData implements Serializable {
-    private List<PartOfSpeechInputData> main;
-    private List<PartOfSpeechInputData> dep;
+    private List<PartOfSpeech> main;
+    private List<PartOfSpeech> dep;
 
-    public List<PartOfSpeechInputData> getMain() {
+    public List<PartOfSpeech> getMain() {
         return main;
     }
 
-    public void setMain(List<PartOfSpeechInputData> main) {
+    public void setMain(List<PartOfSpeech> main) {
         this.main = main;
     }
 
-    public List<PartOfSpeechInputData> getDep() {
+    public List<PartOfSpeech> getDep() {
         return dep;
     }
 
-    public void setDep(List<PartOfSpeechInputData> dep) {
+    public void setDep(List<PartOfSpeech> dep) {
         this.dep = dep;
     }
 }

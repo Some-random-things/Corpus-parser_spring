@@ -1,7 +1,7 @@
 package com.imilkaeu.sprcrp;
 
 import com.imilkaeu.sprcrp.models.input.BigramInputData;
-import com.imilkaeu.sprcrp.models.input.PartOfSpeech;
+import com.imilkaeu.sprcrp.models.input.InputPartOfSpeech;
 import com.imilkaeu.sprcrp.models.input.Property;
 import com.imilkaeu.sprcrp.models.input.PropertyValue;
 
@@ -16,11 +16,11 @@ public class QueryBuilder {
         String query;
         int groupByCount;
         List<String> queryList = new ArrayList<String>();
-        List<PartOfSpeech> mains = data.getMain();
-        List<PartOfSpeech> deps = data.getDep();
+        List<InputPartOfSpeech> mains = data.getMain();
+        List<InputPartOfSpeech> deps = data.getDep();
 
-        for(PartOfSpeech partOfSpeechMain : mains)
-            for(PartOfSpeech partOfSpeechDep : deps){
+        for(InputPartOfSpeech partOfSpeechMain : mains)
+            for(InputPartOfSpeech partOfSpeechDep : deps){
                 query="SELECT w1.partOfSpeech AS mainPartOfSpeech";
                 groupByCount = 2;
 
@@ -111,11 +111,11 @@ public class QueryBuilder {
         String query;
         int groupByCount;
         List<String> queryList = new ArrayList<String>();
-        List<PartOfSpeech> mains = data.getMain();
-        List<PartOfSpeech> deps = data.getDep();
+        List<InputPartOfSpeech> mains = data.getMain();
+        List<InputPartOfSpeech> deps = data.getDep();
 
-        for(PartOfSpeech partOfSpeechMain : mains)
-            for(PartOfSpeech partOfSpeechDep : deps){
+        for(InputPartOfSpeech partOfSpeechMain : mains)
+            for(InputPartOfSpeech partOfSpeechDep : deps){
                 query="SELECT mainpartOfSpeech";
                 groupByCount = 2;
 

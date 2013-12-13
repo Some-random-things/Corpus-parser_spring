@@ -1,9 +1,11 @@
 package com.imilkaeu.sprcrp.dao;
 
+import com.imilkaeu.sprcrp.MetaHelper;
 import com.imilkaeu.sprcrp.QueryBuilder;
 import com.imilkaeu.sprcrp.models.Word;
 import com.imilkaeu.sprcrp.models.input.BigramInputData;
 import com.imilkaeu.sprcrp.models.output.BigramCombination;
+import com.imilkaeu.sprcrp.models.output.OutputPartOfSpeech;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -42,17 +44,42 @@ public class WordDAO {
         List<String> queries;
         if(!inputData.isRawRequest()) queries = QueryBuilder.buildSummaryQueryList(inputData);
         else queries = QueryBuilder.buildRawQueryList(inputData);
+
         for(String query:queries) {
             logger.info("Query: " + query);
             List<Object[]> results = session.createSQLQuery(query).list();
             logger.info("Results size: " + results.size());
-            Integer count; List<String> properties;
+
+            Integer count;
+            OutputPartOfSpeech main;
+            OutputPartOfSpeech dep;
+            List<String> properties = new ArrayList<String>();
+            boolean isMainCurrent;
+
             for(Object[] result:results) {
-                properties = new ArrayList<String>();
-                for(int i = 0; i < result.length-1; i++) properties.add(result[i].toString());
                 if(inputData.isRawRequest()) count = ((BigInteger) result[result.length-1]).intValue();
                 else count = ((BigDecimal) result[result.length-1]).intValue();
-                resultData.add(new BigramCombination(count.intValue(), properties));
+
+                main = new OutputPartOfSpeech(); dep = new OutputPartOfSpeech();
+                properties.clear(); isMainCurrent = true;
+
+                for(int i = 0; i < result.length-1; i++) {
+                    if(MetaHelper.isPartOfSpeech(result[i].toString())) {
+                        if(isMainCurrent) {
+                            main.setPartOfSpeech(result[i].toString());
+                            isMainCurrent = false;
+                        } else {
+                            main.setProperties(properties.toArray(new String[properties.size()]));
+                            dep.setPartOfSpeech(result[i].toString());
+                            properties.clear();
+                        }
+                    } else {
+                        properties.add(result[i].toString());
+                    }
+                }
+
+                dep.setProperties(properties.toArray(new String[properties.size()]));
+                resultData.add(new BigramCombination(count, main, dep));
             }
         }
 

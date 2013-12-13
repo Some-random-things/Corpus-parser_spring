@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by imilka on 10.12.13.
  */
-public class PartOfSpeech implements Serializable {
+public class InputPartOfSpeech implements Serializable {
     private String partOfSpeech;
     private String title;
     private boolean selected;

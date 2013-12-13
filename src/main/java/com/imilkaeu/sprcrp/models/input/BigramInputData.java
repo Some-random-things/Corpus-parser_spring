@@ -7,8 +7,8 @@ import java.util.List;
  * Created by imilka on 10.12.13.
  */
 public class BigramInputData implements Serializable {
-    private List<PartOfSpeech> main;
-    private List<PartOfSpeech> dep;
+    private List<InputPartOfSpeech> main;
+    private List<InputPartOfSpeech> dep;
     private boolean rawRequest = false;
 
     public boolean isRawRequest() {
@@ -19,19 +19,19 @@ public class BigramInputData implements Serializable {
         this.rawRequest = rawRequest;
     }
 
-    public List<PartOfSpeech> getMain() {
+    public List<InputPartOfSpeech> getMain() {
         return main;
     }
 
-    public void setMain(List<PartOfSpeech> main) {
+    public void setMain(List<InputPartOfSpeech> main) {
         this.main = main;
     }
 
-    public List<PartOfSpeech> getDep() {
+    public List<InputPartOfSpeech> getDep() {
         return dep;
     }
 
-    public void setDep(List<PartOfSpeech> dep) {
+    public void setDep(List<InputPartOfSpeech> dep) {
         this.dep = dep;
     }
 }

@@ -1,18 +1,19 @@
 package com.imilkaeu.sprcrp.models.output;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * Created by imilka on 13.12.13.
  */
-public class BigramCombination {
+public class BigramCombination implements Serializable {
     private int count;
-    private List<String> properties = new ArrayList<String>();
+    private OutputPartOfSpeech main;
+    private OutputPartOfSpeech dep;
 
-    public BigramCombination(int count, List<String> properties) {
+    public BigramCombination(int count, OutputPartOfSpeech main, OutputPartOfSpeech dep) {
         this.count = count;
-        this.properties = properties;
+        this.main = main;
+        this.dep = dep;
     }
 
     public int getCount() {
@@ -23,11 +24,19 @@ public class BigramCombination {
         this.count = count;
     }
 
-    public List<String> getProperties() {
-        return properties;
+    public OutputPartOfSpeech getMain() {
+        return main;
     }
 
-    public void setProperties(List<String> properties) {
-        this.properties = properties;
+    public void setMain(OutputPartOfSpeech main) {
+        this.main = main;
+    }
+
+    public OutputPartOfSpeech getDep() {
+        return dep;
+    }
+
+    public void setDep(OutputPartOfSpeech dep) {
+        this.dep = dep;
     }
 }

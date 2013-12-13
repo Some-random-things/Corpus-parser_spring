@@ -12,7 +12,7 @@ public class MetaHelper {
     public static HashMap<String, String> languageProperties = new HashMap<String, String>();
     private static String META_FILE_NAME = "/WEB-INF/parser_ru_meta.txt";
 
-    public static void getMeta(String metaFileName) {
+    public static void getMeta() {
         FileSystemResource resource = new FileSystemResource(META_FILE_NAME);
         File text = resource.getFile();
         try{
@@ -30,13 +30,21 @@ public class MetaHelper {
         }
     }
 
-    public static boolean isPartOfSpeech(String a){
-        if(!languageProperties.containsKey(a)) return true;
-        return false;
+    public static boolean isPartOfSpeech(String a) {
+        /*getMeta();
+        if(!languageProperties.containsKey(a.toLowerCase())) return true;
+        return false;*/
+        if(!a.equals("S") && !a.equals("A") && !a.equals("ADV")
+                && !a.equals("COM") && !a.equals("CONJ") && !a.equals("INTJ")
+                && !a.equals("NID") && !a.equals("NUM") && !a.equals("PART")
+                && !a.equals("PR") && !a.equals("V")) {
+            return false;
+        } return true;
     }
 
-    public static String getDatabaseField(String a){
-        return languageProperties.get(a);
+    public static String getDatabaseField(String a) {
+        getMeta();
+        return languageProperties.get(a.toLowerCase());
     }
 
 }

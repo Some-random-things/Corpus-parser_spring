@@ -5,7 +5,7 @@ import com.imilkaeu.sprcrp.QueryBuilder;
 import com.imilkaeu.sprcrp.models.Word;
 import com.imilkaeu.sprcrp.models.input.BigramInputData;
 import com.imilkaeu.sprcrp.models.output.BigramCombination;
-import com.imilkaeu.sprcrp.models.output.OutputPartOfSpeech;
+import com.imilkaeu.sprcrp.models.output.PartOfSpeech;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -51,8 +51,8 @@ public class WordDAO {
             logger.info("Results size: " + results.size());
 
             Integer count;
-            OutputPartOfSpeech main;
-            OutputPartOfSpeech dep;
+            PartOfSpeech main;
+            PartOfSpeech dep;
             List<String> properties = new ArrayList<String>();
             boolean isMainCurrent;
 
@@ -60,7 +60,7 @@ public class WordDAO {
                 if(inputData.isRawRequest()) count = ((BigInteger) result[result.length-1]).intValue();
                 else count = ((BigDecimal) result[result.length-1]).intValue();
 
-                main = new OutputPartOfSpeech(); dep = new OutputPartOfSpeech();
+                main = new PartOfSpeech(); dep = new PartOfSpeech();
                 properties.clear(); isMainCurrent = true;
 
                 for(int i = 0; i < result.length-1; i++) {
@@ -79,7 +79,9 @@ public class WordDAO {
                 }
 
                 dep.setProperties(properties.toArray(new String[properties.size()]));
-                resultData.add(new BigramCombination(count, main, dep));
+                BigramCombination bc = new BigramCombination();
+                bc.setCount(count); bc.setDep(dep); bc.setMain(main);
+                resultData.add(bc);
             }
         }
 

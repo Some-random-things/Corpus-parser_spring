@@ -4,6 +4,8 @@ import com.imilkaeu.sprcrp.models.input.BigramInputData;
 import com.imilkaeu.sprcrp.models.input.InputPartOfSpeech;
 import com.imilkaeu.sprcrp.models.input.Property;
 import com.imilkaeu.sprcrp.models.input.PropertyValue;
+import com.imilkaeu.sprcrp.models.output.BigramCombination;
+import com.imilkaeu.sprcrp.models.output.PartOfSpeech;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -199,5 +201,28 @@ public class QueryBuilder {
                 queryList.add(query);
             }
         return queryList;
+    }
+
+    public static String buildSentenceQuery(BigramCombination bigram, Class<?> cl) {
+        PartOfSpeech main = bigram.getMain();
+        PartOfSpeech dep = bigram.getDep();
+
+        String query;
+        query="SELECT w1.word AS mainword, w2.word AS depword, s.id, s.sentence FROM words w1 JOIN words w2 on w2.domid = w1.internalId JOIN sentences s ON s.id = w1.sentenceId " +
+                "WHERE w1.partOfSpeech = '" + main.getPartOfSpeech() + "' AND w2.partOfSpeech = '" + dep.getPartOfSpeech() + "'";
+
+        String dbfield;
+        for(String property : main.getProperties()) {
+            dbfield = MetaHelper.getDatabaseField(property, cl);
+            query += " AND w1." + dbfield + " = '" + property + "'";
+        }
+
+        for(String property : dep.getProperties()) {
+            dbfield = MetaHelper.getDatabaseField(property, cl);
+            query += " AND w2." + dbfield + " = '" + property + "'";
+        }
+
+        query += " AND w1.sentenceId = w2.sentenceId LIMIT 1000";
+        return query;
     }
 }

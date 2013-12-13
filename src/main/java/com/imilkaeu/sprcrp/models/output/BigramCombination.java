@@ -7,14 +7,8 @@ import java.io.Serializable;
  */
 public class BigramCombination implements Serializable {
     private int count;
-    private OutputPartOfSpeech main;
-    private OutputPartOfSpeech dep;
-
-    public BigramCombination(int count, OutputPartOfSpeech main, OutputPartOfSpeech dep) {
-        this.count = count;
-        this.main = main;
-        this.dep = dep;
-    }
+    private PartOfSpeech main;
+    private PartOfSpeech dep;
 
     public int getCount() {
         return count;
@@ -24,19 +18,19 @@ public class BigramCombination implements Serializable {
         this.count = count;
     }
 
-    public OutputPartOfSpeech getMain() {
+    public PartOfSpeech getMain() {
         return main;
     }
 
-    public void setMain(OutputPartOfSpeech main) {
+    public void setMain(PartOfSpeech main) {
         this.main = main;
     }
 
-    public OutputPartOfSpeech getDep() {
+    public PartOfSpeech getDep() {
         return dep;
     }
 
-    public void setDep(OutputPartOfSpeech dep) {
+    public void setDep(PartOfSpeech dep) {
         this.dep = dep;
     }
 }

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by imilka on 13.12.13.
  */
-public class OutputPartOfSpeech implements Serializable {
+public class PartOfSpeech implements Serializable {
     private String partOfSpeech;
     private String[] properties;
 

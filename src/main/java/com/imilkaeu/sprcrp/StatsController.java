@@ -1,13 +1,17 @@
 package com.imilkaeu.sprcrp;
 
-import com.imilkaeu.sprcrp.models.Greeting;
+import com.imilkaeu.sprcrp.dao.WordDAO;
 import com.imilkaeu.sprcrp.models.input.BigramInputData;
+import com.imilkaeu.sprcrp.models.output.BigramCombination;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by imilka on 10.12.13.
@@ -17,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 public class StatsController {
 
     private static final Logger logger = Logger.getLogger(StatsController.class);
+    @Autowired
+    private WordDAO wordDAO;
 
     @RequestMapping(method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
@@ -26,9 +32,9 @@ public class StatsController {
 
     @RequestMapping(value="bigram", method = RequestMethod.POST)
     public @ResponseBody
-    Greeting bigram(
+    List<BigramCombination> bigram(
             @RequestBody final BigramInputData inputData) {
-        return new Greeting(1, Boolean.toString(inputData.getMain().get(0).getContent().get(0).getValues().get(0).isSelected()));
+        return wordDAO.getBigramStats(inputData);
     }
 
     @ExceptionHandler

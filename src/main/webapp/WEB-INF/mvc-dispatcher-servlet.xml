@@ -23,22 +23,33 @@
        username root and blank password. Change below if it's not the case -->
     <bean id="localDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/cparser"/>
+        <property name="url" value="jdbc:mysql://ams2.imilka.eu:3306/cparser?characterEncoding=UTF-8"/>
         <property name="username" value="cparser"/>
         <property name="password" value="8HB7F5STY3Vejzc8"/>
         <property name="validationQuery" value="SELECT 1"/>
     </bean>
 
-    <jpa:repositories base-package="com.imilkaeu.sprcrp"/>
-
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="defaultPersistenceUnit"/>
+    <!-- Hibernate Session Factory -->
+    <bean id="mySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="localDataSource"/>
+        <property name="packagesToScan">
+            <array>
+                <value>com.imilkaeu.sprcrp</value>
+            </array>
+        </property>
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=org.hibernate.dialect.MySQLDialect
+            </value>
+        </property>
     </bean>
 
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    <!-- Hibernate Transaction Manager -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="mySessionFactory"/>
     </bean>
 
+    <!-- Activates annotation based transaction management -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
 </beans>

@@ -9,6 +9,15 @@ import java.util.List;
 public class BigramInputData implements Serializable {
     private List<PartOfSpeech> main;
     private List<PartOfSpeech> dep;
+    private boolean rawRequest = false;
+
+    public boolean isRawRequest() {
+        return rawRequest;
+    }
+
+    public void setRawRequest(boolean rawRequest) {
+        this.rawRequest = rawRequest;
+    }
 
     public List<PartOfSpeech> getMain() {
         return main;

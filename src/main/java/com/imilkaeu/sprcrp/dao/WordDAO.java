@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,16 +39,19 @@ public class WordDAO {
         Session session = sessionFactory.getCurrentSession();
         List<BigramCombination> resultData = new ArrayList<BigramCombination>();
 
-        List<String> queries = QueryBuilder.buildQueryList(inputData);
+        List<String> queries;
+        if(!inputData.isRawRequest()) queries = QueryBuilder.buildSummaryQueryList(inputData);
+        else queries = QueryBuilder.buildRawQueryList(inputData);
         for(String query:queries) {
             logger.info("Query: " + query);
             List<Object[]> results = session.createSQLQuery(query).list();
             logger.info("Results size: " + results.size());
-            BigInteger count; List<String> properties;
+            Integer count; List<String> properties;
             for(Object[] result:results) {
                 properties = new ArrayList<String>();
                 for(int i = 0; i < result.length-1; i++) properties.add(result[i].toString());
-                count = (BigInteger) result[result.length-1];
+                if(inputData.isRawRequest()) count = ((BigInteger) result[result.length-1]).intValue();
+                else count = ((BigDecimal) result[result.length-1]).intValue();
                 resultData.add(new BigramCombination(count.intValue(), properties));
             }
         }

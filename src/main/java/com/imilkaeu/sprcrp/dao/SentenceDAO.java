@@ -22,6 +22,9 @@ public class SentenceDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
+    @Autowired
+    private MetaDAO metaDAO;
+
     private static final Logger logger = Logger.getLogger(SentenceDAO.class);
 
     @Transactional
@@ -29,7 +32,7 @@ public class SentenceDAO {
         Session session = sessionFactory.getCurrentSession();
         List<OutputSentenceInfo> resultData = new ArrayList<OutputSentenceInfo>();
 
-        String query = QueryBuilder.buildSentenceQuery(inputData, getClass());
+        String query = QueryBuilder.buildSentenceQuery(inputData, metaDAO);
         logger.warn("Sentence query: " + query);
         List<Object[]> results = session.createSQLQuery(query).list();
         int id; String bigram, sentence;

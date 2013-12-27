@@ -1,5 +1,6 @@
 package com.imilkaeu.sprcrp;
 
+import com.imilkaeu.sprcrp.dao.MetaDAO;
 import com.imilkaeu.sprcrp.models.input.BigramInputData;
 import com.imilkaeu.sprcrp.models.input.InputPartOfSpeech;
 import com.imilkaeu.sprcrp.models.input.Property;
@@ -14,6 +15,7 @@ import java.util.List;
  * Created by imilka on 12.12.13.
  */
 public class QueryBuilder {
+
     public static List<String> buildRawQueryList(BigramInputData data){
         String query;
         int groupByCount;
@@ -203,7 +205,7 @@ public class QueryBuilder {
         return queryList;
     }
 
-    public static String buildSentenceQuery(BigramCombination bigram, Class<?> cl) {
+    public static String buildSentenceQuery(BigramCombination bigram, MetaDAO metaDAO) {
         PartOfSpeech main = bigram.getMain();
         PartOfSpeech dep = bigram.getDep();
 
@@ -213,16 +215,16 @@ public class QueryBuilder {
 
         String dbfield;
         for(String property : main.getProperties()) {
-            dbfield = MetaHelper.getDatabaseField(property, cl);
+            dbfield = metaDAO.getDatabaseField(property);
             query += " AND w1." + dbfield + " = '" + property + "'";
         }
 
         for(String property : dep.getProperties()) {
-            dbfield = MetaHelper.getDatabaseField(property, cl);
+            dbfield = metaDAO.getDatabaseField(property);
             query += " AND w2." + dbfield + " = '" + property + "'";
         }
 
-        query += " AND w1.sentenceId = w2.sentenceId LIMIT 1000";
+        query += " AND w1.sentenceId = w2.sentenceId LIMIT 100";
         return query;
     }
 }

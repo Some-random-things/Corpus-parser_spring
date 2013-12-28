@@ -208,10 +208,14 @@ public class QueryBuilder {
     public static String buildSentenceQuery(BigramCombination bigram, MetaDAO metaDAO) {
         PartOfSpeech main = bigram.getMain();
         PartOfSpeech dep = bigram.getDep();
+        int direction = bigram.getDirection();
 
         String query;
         query="SELECT w1.word AS mainword, w2.word AS depword, s.id, s.sentence FROM words w1 JOIN words w2 on w2.domid = w1.internalId JOIN sentences s ON s.id = w1.sentenceId " +
                 "WHERE w1.partOfSpeech = '" + main.getPartOfSpeech() + "' AND w2.partOfSpeech = '" + dep.getPartOfSpeech() + "'";
+
+        if(direction == 0) query += " AND w1.internalId > w2.internalId";
+        else query += " AND w1.internalId < w2.internalId";
 
         String dbfield;
         for(String property : main.getProperties()) {

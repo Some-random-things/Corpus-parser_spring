@@ -78,9 +78,13 @@ public class WordDAO {
                     }
                 }
 
+                String direction = properties.get(properties.size()-1);
+                properties.remove(properties.size()-1);
+
                 dep.setProperties(properties.toArray(new String[properties.size()]));
                 BigramCombination bc = new BigramCombination();
                 bc.setCount(count); bc.setDep(dep); bc.setMain(main);
+                bc.setDirection(Integer.valueOf(direction));
                 resultData.add(bc);
             }
         }

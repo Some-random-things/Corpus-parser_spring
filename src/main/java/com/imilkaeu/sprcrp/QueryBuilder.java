@@ -156,7 +156,7 @@ public class QueryBuilder {
                     }
                 }
                 //FROM
-                query+=", SUM(count) FROM combinations ";
+                query+=", direction, SUM(count) FROM combinations2 ";
                 //
                 //WHERE
                 //main
@@ -199,7 +199,7 @@ public class QueryBuilder {
                 for(int i=0;i<groupByCount-1;i++)
                     query+=String.valueOf(i+1)+", ";
                 query+=String.valueOf(groupByCount);
-                //
+                query+="," + String.valueOf(groupByCount+1);
                 queryList.add(query);
             }
         return queryList;

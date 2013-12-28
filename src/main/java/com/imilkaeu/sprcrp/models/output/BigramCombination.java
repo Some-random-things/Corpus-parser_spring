@@ -9,9 +9,18 @@ public class BigramCombination implements Serializable {
     private int count;
     private PartOfSpeech main;
     private PartOfSpeech dep;
+    private int direction;
 
     public int getCount() {
         return count;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
     }
 
     public void setCount(int count) {

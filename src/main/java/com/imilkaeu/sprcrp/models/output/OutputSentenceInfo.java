@@ -10,10 +10,10 @@ import java.io.Serializable;
  */
 public class OutputSentenceInfo implements Serializable {
     private int id;
-    private String bigram;
+    private Bigram bigram;
     private String sentence;
 
-    public OutputSentenceInfo(int id, String bigram, String sentence) {
+    public OutputSentenceInfo(int id, Bigram bigram, String sentence) {
         this.id = id;
         this.bigram = bigram;
         this.sentence = sentence;
@@ -27,11 +27,11 @@ public class OutputSentenceInfo implements Serializable {
         this.id = id;
     }
 
-    public String getBigram() {
+    public Bigram getBigram() {
         return bigram;
     }
 
-    public void setBigram(String bigram) {
+    public void setBigram(Bigram bigram) {
         this.bigram = bigram;
     }
 

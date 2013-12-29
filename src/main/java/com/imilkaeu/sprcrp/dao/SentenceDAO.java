@@ -1,6 +1,7 @@
 package com.imilkaeu.sprcrp.dao;
 
 import com.imilkaeu.sprcrp.QueryBuilder;
+import com.imilkaeu.sprcrp.models.output.Bigram;
 import com.imilkaeu.sprcrp.models.output.BigramCombination;
 import com.imilkaeu.sprcrp.models.output.OutputSentenceInfo;
 import org.apache.log4j.Logger;
@@ -35,13 +36,11 @@ public class SentenceDAO {
         String query = QueryBuilder.buildSentenceQuery(inputData, metaDAO);
         logger.warn("Sentence query: " + query);
         List<Object[]> results = session.createSQLQuery(query).list();
-        int id; String bigram, sentence;
+        int id; Bigram bigram; String sentence;
         for(Object[] result: results) {
-            bigram = result[0].toString();
-            bigram += " > " + result[1].toString();
+            bigram = new Bigram(result[0].toString(), result[1].toString(), inputData.getDirection());
             id = (Integer) result[2];
             sentence = result[3].toString();
-
             resultData.add(new OutputSentenceInfo(id, bigram, sentence));
         }
 

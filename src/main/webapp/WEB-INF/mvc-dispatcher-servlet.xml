@@ -23,7 +23,7 @@
        username root and blank password. Change below if it's not the case -->
     <bean id="localDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://ams2.imilka.eu:3306/cparser?characterEncoding=UTF-8"/>
+        <property name="url" value="jdbc:mysql://95.85.11.204:3306/cparser?characterEncoding=UTF-8"/>
         <property name="username" value="cparser"/>
         <property name="password" value="8HB7F5STY3Vejzc8"/>
         <property name="validationQuery" value="SELECT 1"/>

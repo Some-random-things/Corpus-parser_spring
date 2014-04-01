@@ -2,6 +2,7 @@ package com.imilkaeu.sprcrp.dao;
 
 import com.imilkaeu.sprcrp.MetaHelper;
 import com.imilkaeu.sprcrp.QueryBuilder;
+import com.imilkaeu.sprcrp.models.HashQuery;
 import com.imilkaeu.sprcrp.models.Word;
 import com.imilkaeu.sprcrp.models.input.BigramInputData;
 import com.imilkaeu.sprcrp.models.output.BigramCombination;
@@ -28,6 +29,9 @@ public class WordDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
+    @Autowired
+    private HashDAO hashDAO;
+
     private static final Logger logger = Logger.getLogger(WordDAO.class);
 
     @Transactional
@@ -39,7 +43,13 @@ public class WordDAO {
 
     @Transactional
     public BigramCombinationInfo getBigramStats(String hash) {
-        return null;
+        List<HashQuery> hqs = hashDAO.findByHash(hash);
+        List<String> queries = new ArrayList<String>();
+        for(HashQuery hq: hqs) {
+            queries.add(hq.getQuery());
+        }
+
+        return getBigramStats(queries, false);
     }
 
     @Transactional
@@ -56,7 +66,11 @@ public class WordDAO {
         Session session = sessionFactory.getCurrentSession();
         List<BigramCombination> resultData = new ArrayList<BigramCombination>();
 
+        String hash = Long.toHexString(Double.doubleToLongBits(Math.random()));
+
         for(String query:queries) {
+            hashDAO.insertQuery(hash, query);
+
             logger.info("Query: " + query);
             List<Object[]> results = session.createSQLQuery(query).list();
             logger.info("Results size: " + results.size());
@@ -101,7 +115,7 @@ public class WordDAO {
         }
 
         BigramCombinationInfo returnInfo = new BigramCombinationInfo();
-        returnInfo.setHash("HASHHERE");
+        returnInfo.setHash(hash);
         returnInfo.setCombinations(resultData);
         return returnInfo;
     }

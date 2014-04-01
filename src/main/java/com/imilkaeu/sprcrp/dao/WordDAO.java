@@ -5,6 +5,7 @@ import com.imilkaeu.sprcrp.QueryBuilder;
 import com.imilkaeu.sprcrp.models.Word;
 import com.imilkaeu.sprcrp.models.input.BigramInputData;
 import com.imilkaeu.sprcrp.models.output.BigramCombination;
+import com.imilkaeu.sprcrp.models.output.BigramCombinationInfo;
 import com.imilkaeu.sprcrp.models.output.PartOfSpeech;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -37,13 +38,23 @@ public class WordDAO {
     }
 
     @Transactional
-    public List<BigramCombination> getBigramStats(BigramInputData inputData) {
-        Session session = sessionFactory.getCurrentSession();
-        List<BigramCombination> resultData = new ArrayList<BigramCombination>();
+    public BigramCombinationInfo getBigramStats(String hash) {
+        return null;
+    }
 
+    @Transactional
+    public BigramCombinationInfo getBigramStats(BigramInputData inputData) {
         List<String> queries;
         if(!inputData.isRawRequest()) queries = QueryBuilder.buildSummaryQueryList(inputData);
         else queries = QueryBuilder.buildRawQueryList(inputData);
+
+        return getBigramStats(queries, inputData.isRawRequest());
+    }
+
+    @Transactional
+    public BigramCombinationInfo getBigramStats(List<String> queries, boolean isRawRequest) {
+        Session session = sessionFactory.getCurrentSession();
+        List<BigramCombination> resultData = new ArrayList<BigramCombination>();
 
         for(String query:queries) {
             logger.info("Query: " + query);
@@ -57,7 +68,7 @@ public class WordDAO {
             boolean isMainCurrent;
 
             for(Object[] result:results) {
-                if(inputData.isRawRequest()) count = ((BigInteger) result[result.length-1]).intValue();
+                if(isRawRequest) count = ((BigInteger) result[result.length-1]).intValue();
                 else count = ((BigDecimal) result[result.length-1]).intValue();
 
                 main = new PartOfSpeech(); dep = new PartOfSpeech();
@@ -89,6 +100,9 @@ public class WordDAO {
             }
         }
 
-        return resultData;
+        BigramCombinationInfo returnInfo = new BigramCombinationInfo();
+        returnInfo.setHash("HASHHERE");
+        returnInfo.setCombinations(resultData);
+        return returnInfo;
     }
 }

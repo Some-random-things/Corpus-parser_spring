@@ -1,12 +1,14 @@
 package com.imilkaeu.sprcrp.models.output;
 
+import java.io.Serializable;
+
 /**
  * Created with IntelliJ IDEA.
  * User: imilka
  * Date: 28.12.13
  * Time: 22:08
  */
-public class Bigram {
+public class Bigram implements Serializable {
     String main;
     String dep;
     int direction;

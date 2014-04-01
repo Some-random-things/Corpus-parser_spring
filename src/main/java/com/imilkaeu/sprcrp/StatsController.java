@@ -4,6 +4,7 @@ import com.imilkaeu.sprcrp.dao.SentenceDAO;
 import com.imilkaeu.sprcrp.dao.WordDAO;
 import com.imilkaeu.sprcrp.models.input.BigramInputData;
 import com.imilkaeu.sprcrp.models.output.BigramCombination;
+import com.imilkaeu.sprcrp.models.output.BigramCombinationInfo;
 import com.imilkaeu.sprcrp.models.output.OutputSentenceInfo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,16 @@ public class StatsController {
 
     @RequestMapping(value="bigram", method = RequestMethod.POST)
     public @ResponseBody
-    List<BigramCombination> bigram(
+    BigramCombinationInfo bigram(
             @RequestBody final BigramInputData inputData) {
         return wordDAO.getBigramStats(inputData);
+    }
+
+    @RequestMapping(value="bigram", method = RequestMethod.GET)
+    public @ResponseBody
+    BigramCombinationInfo bigram(
+            @RequestParam(value = "hash") String hash) {
+        return wordDAO.getBigramStats(hash);
     }
 
     @RequestMapping(value="getsentence", method = RequestMethod.POST, consumes="application/json", produces="application/json")

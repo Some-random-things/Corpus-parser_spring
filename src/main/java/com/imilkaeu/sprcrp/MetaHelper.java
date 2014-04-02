@@ -1,11 +1,10 @@
 package com.imilkaeu.sprcrp;
 
-//import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.springframework.core.io.FileSystemResource;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 /**
  * Created by imilka on 13.12.13.
@@ -14,7 +13,7 @@ public class MetaHelper {
     public static HashMap<String, String> languageProperties = new HashMap<String, String>();
     private static String META_FILE_NAME = "parser_ru_meta.txt";
 
-    private static final Logger logger = Logger.getLogger(String.valueOf(MetaHelper.class));
+    private static final Logger logger = Logger.getLogger(MetaHelper.class);
 
     public static HashMap<String, String> getMeta(Class<?> cl) {
         HashMap<String, String> ret = new HashMap<String, String>();
@@ -53,7 +52,7 @@ public class MetaHelper {
 
     public static String getDatabaseField(String a, Class<?> cl) {
         HashMap<String, String> meta = getMeta(cl);
-       // logger.warn("GDF HASHMAP SIZE: " + meta.size());
+        logger.warn("GDF HASHMAP SIZE: " + meta.size());
         return meta.get(a);
     }
 

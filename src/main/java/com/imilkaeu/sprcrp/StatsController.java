@@ -6,7 +6,7 @@ import com.imilkaeu.sprcrp.models.input.BigramInputData;
 import com.imilkaeu.sprcrp.models.output.BigramCombination;
 import com.imilkaeu.sprcrp.models.output.BigramCombinationInfo;
 import com.imilkaeu.sprcrp.models.output.OutputSentenceInfo;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/stats")
 public class StatsController {
 
-    private static final Logger logger = Logger.getLogger(StatsController.class);
+    //private static final Logger logger = Logger.getLogger(StatsController.class);
     @Autowired
     private WordDAO wordDAO;
     @Autowired
@@ -56,9 +56,9 @@ public class StatsController {
         return sentenceDAO.getSentenceByBigram(inputData);
     }
 
-    @ExceptionHandler
+    /*@ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
         logger.warn("Returning HTTP 400 Bad Request", e);
-    }
+    }  */
 }

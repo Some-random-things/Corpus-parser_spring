@@ -1,5 +1,6 @@
 package com.imilkaeu.sprcrp.dao;
 
+import com.imilkaeu.sprcrp.DecisionTreeBuilder;
 import com.imilkaeu.sprcrp.MetaHelper;
 import com.imilkaeu.sprcrp.QueryBuilder;
 import com.imilkaeu.sprcrp.models.HashQuery;
@@ -7,6 +8,7 @@ import com.imilkaeu.sprcrp.models.Word;
 import com.imilkaeu.sprcrp.models.input.BigramInputData;
 import com.imilkaeu.sprcrp.models.output.BigramCombination;
 import com.imilkaeu.sprcrp.models.output.BigramCombinationInfo;
+import com.imilkaeu.sprcrp.models.output.DecisionTreeNode;
 import com.imilkaeu.sprcrp.models.output.PartOfSpeech;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -19,6 +21,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by imilka on 13.12.13.
@@ -31,6 +34,9 @@ public class WordDAO {
 
     @Autowired
     private HashDAO hashDAO;
+
+    @Autowired
+    private MetaDAO metaDAO;
 
     private static final Logger logger = Logger.getLogger(WordDAO.class);
 
@@ -118,5 +124,20 @@ public class WordDAO {
         returnInfo.setHash(hash);
         returnInfo.setCombinations(resultData);
         return returnInfo;
+    }
+
+    @Transactional
+    public DecisionTreeNode getParamsData(BigramCombination inputData) {
+        DecisionTreeNode root = new DecisionTreeNode();
+        Session session = sessionFactory.getCurrentSession();
+
+        String query = QueryBuilder.buildDecisionTreeQuery(inputData, metaDAO);
+        logger.warn("Decision tree query: " + query);
+        List<Map<String, Object>> results = session.createQuery(query).list();
+
+        DecisionTreeBuilder.Node rootNode = new DecisionTreeBuilder(results).startParse().getRootNode();
+        // convert here
+
+        return root;
     }
 }

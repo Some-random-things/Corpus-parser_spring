@@ -1,4 +1,4 @@
-package com.imilkaeu.sprcrp;
+package com.imilkaeu.sprcrp.controllers;
 
 import com.imilkaeu.sprcrp.dao.SentenceDAO;
 import com.imilkaeu.sprcrp.dao.WordDAO;

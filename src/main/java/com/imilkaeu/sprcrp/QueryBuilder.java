@@ -231,4 +231,32 @@ public class QueryBuilder {
         query += " AND w1.sentenceId = w2.sentenceId LIMIT 100";
         return query;
     }
+
+    public static String buildDecisionTreeQuery(BigramCombination bigram, MetaDAO metaDAO) {
+        PartOfSpeech main = bigram.getMain();
+        PartOfSpeech dep = bigram.getDep();
+
+        String query = "SELECT new map(w1.partOfSpeech AS partOfSpeech1, w2.partOfSpeech AS partOfSpeech2, w1.count AS count1, w2.count AS count2, w1.gender AS gender1, w2.gender AS gender2, " +
+                "w1.case AS case1, w2.case AS case2, w1.animacy AS animacy1, w2.animacy AS animacy2, w1.short AS short1, w2.short AS short2, w1.aspect AS aspect1, w2.aspect AS aspect2, " +
+                "w1.mood AS mood1, w2.mood AS mood2, w1.tense AS tense1, w2.tense AS tense2, w1.person AS person1, w2.person AS person2, w1.form AS form1, w2.form AS form2, " +
+                "w1.comparison AS comparison1, w2.comparison AS comparison2, w1.voice AS voice1, w2.voice AS voice2, w1.pledge AS pledge1 , w2.pledge AS pledge2, " +
+                "w1.internalId > w2.internalId AS direction) " +
+                "FROM words w1 " +
+                "JOIN words w2 on w2.domid = w1.internalId " +
+                "WHERE w1.partOfSpeech = '" + main.getPartOfSpeech() + "' AND w2.partOfSpeech = '" + dep.getPartOfSpeech() + "'";
+
+        String dbfield;
+        for(String property : main.getProperties()) {
+            dbfield = metaDAO.getDatabaseField(property);
+            query += " AND w1." + dbfield + " = '" + property + "'";
+        }
+
+        for(String property : dep.getProperties()) {
+            dbfield = metaDAO.getDatabaseField(property);
+            query += " AND w2." + dbfield + " = '" + property + "'";
+        }
+
+        query += " AND w1.sentenceId = w2.sentenceId";
+        return query;
+    }
 }

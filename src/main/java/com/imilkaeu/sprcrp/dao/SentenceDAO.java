@@ -4,7 +4,6 @@ import com.imilkaeu.sprcrp.QueryBuilder;
 import com.imilkaeu.sprcrp.models.output.Bigram;
 import com.imilkaeu.sprcrp.models.output.BigramCombination;
 import com.imilkaeu.sprcrp.models.output.OutputSentenceInfo;
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +25,12 @@ public class SentenceDAO {
     @Autowired
     private MetaDAO metaDAO;
 
-    private static final Logger logger = Logger.getLogger(SentenceDAO.class);
-
     @Transactional
     public List<OutputSentenceInfo> getSentenceByBigram(BigramCombination inputData) {
         Session session = sessionFactory.getCurrentSession();
         List<OutputSentenceInfo> resultData = new ArrayList<OutputSentenceInfo>();
 
         String query = QueryBuilder.buildSentenceQuery(inputData, metaDAO);
-        logger.warn("Sentence query: " + query);
         List<Object[]> results = session.createSQLQuery(query).list();
         int id; Bigram bigram; String sentence;
         for(Object[] result: results) {

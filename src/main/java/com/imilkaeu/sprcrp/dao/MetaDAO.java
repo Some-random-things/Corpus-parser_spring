@@ -1,6 +1,5 @@
 package com.imilkaeu.sprcrp.dao;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ import java.util.List;
 public class MetaDAO {
     @Autowired
     private SessionFactory sessionFactory;
-
-    private static final Logger logger = Logger.getLogger(MetaDAO.class);
 
     @Transactional
     public String getDatabaseField(String property) {

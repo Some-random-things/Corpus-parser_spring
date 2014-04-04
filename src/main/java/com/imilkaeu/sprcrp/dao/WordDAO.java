@@ -6,13 +6,12 @@ import com.imilkaeu.sprcrp.QueryBuilder;
 import com.imilkaeu.sprcrp.models.HashQuery;
 import com.imilkaeu.sprcrp.models.Word;
 import com.imilkaeu.sprcrp.models.input.BigramInputData;
-import com.imilkaeu.sprcrp.models.output.BigramCombination;
-import com.imilkaeu.sprcrp.models.output.BigramCombinationInfo;
-import com.imilkaeu.sprcrp.models.output.DecisionTreeNode;
-import com.imilkaeu.sprcrp.models.output.PartOfSpeech;
+import com.imilkaeu.sprcrp.models.output.*;
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.AliasToEntityMapResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,9 +76,9 @@ public class WordDAO {
         for(String query:queries) {
             hashDAO.insertQuery(hash, query);
 
-            logger.info("Query: " + query);
+            //logger.info("Query: " + query);
             List<Object[]> results = session.createSQLQuery(query).list();
-            logger.info("Results size: " + results.size());
+            //logger.info("Results size: " + results.size());
 
             Integer count;
             PartOfSpeech main;
@@ -127,17 +126,18 @@ public class WordDAO {
     }
 
     @Transactional
-    public DecisionTreeNode getParamsData(BigramCombination inputData) {
+    public DecisionTreeBuilder.Node getDecisionTreeVisualization(BigramCombination inputData) {
         DecisionTreeNode root = new DecisionTreeNode();
         Session session = sessionFactory.getCurrentSession();
 
-        String query = QueryBuilder.buildDecisionTreeQuery(inputData, metaDAO);
-        logger.warn("Decision tree query: " + query);
-        List<Map<String, Object>> results = session.createQuery(query).list();
+        String queryString = QueryBuilder.buildDecisionTreeQuery(inputData, metaDAO);
+        Query query = session.createSQLQuery(queryString);
+        query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
 
+        List<Map<String,Object>> results = query.list();
         DecisionTreeBuilder.Node rootNode = new DecisionTreeBuilder(results).startParse().getRootNode();
         // convert here
 
-        return root;
+        return rootNode;
     }
 }

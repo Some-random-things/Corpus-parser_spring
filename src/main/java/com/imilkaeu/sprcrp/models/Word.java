@@ -31,11 +31,7 @@ public class Word implements Serializable {
     private String pledge;
     private String additional;
     private int sentenceId;
-
-    @Column(name = "case")
     private String wordCase;
-
-    @Column(name = "short")
     private String wordShort;
 
     public long getId() {

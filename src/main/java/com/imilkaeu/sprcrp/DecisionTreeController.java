@@ -1,8 +1,7 @@
-package com.imilkaeu.sprcrp.controllers;
+package com.imilkaeu.sprcrp;
 
 import com.imilkaeu.sprcrp.dao.WordDAO;
 import com.imilkaeu.sprcrp.models.output.BigramCombination;
-import com.imilkaeu.sprcrp.models.output.DecisionTreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,9 +24,9 @@ public class DecisionTreeController {
 
     @RequestMapping(value="visualize", method = RequestMethod.POST, consumes="application/json", produces="application/json")
     public @ResponseBody
-    DecisionTreeNode visualize(
+    DecisionTreeBuilder.Node visualize(
             @RequestBody final BigramCombination inputData) {
-        return wordDAO.getParamsData(inputData);
+        return wordDAO.getDecisionTreeVisualization(inputData);
     }
 
 }

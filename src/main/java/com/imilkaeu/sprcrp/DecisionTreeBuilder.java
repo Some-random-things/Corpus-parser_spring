@@ -1,5 +1,6 @@
 package com.imilkaeu.sprcrp;
 
+import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -18,6 +19,40 @@ public class DecisionTreeBuilder {
             this.name = n;
             this.left = left;
             this.right = right;
+
+            children = new ArrayList<Edge>();
+        }
+
+        public ArrayList<Edge> getChildren() {
+            return children;
+        }
+
+        public void setChildren(ArrayList<Edge> children) {
+            this.children = children;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getLeft() {
+            return left;
+        }
+
+        public void setLeft(int left) {
+            this.left = left;
+        }
+
+        public int getRight() {
+            return right;
+        }
+
+        public void setRight(int right) {
+            this.right = right;
         }
     }
 
@@ -29,6 +64,22 @@ public class DecisionTreeBuilder {
             this.end = e;
             this.value = v;
         }
+
+        public Node getEnd() {
+            return end;
+        }
+
+        public void setEnd(Node end) {
+            this.end = end;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
     }
 
     private Node rootNode = null;
@@ -36,13 +87,12 @@ public class DecisionTreeBuilder {
     private HashMap<String, ArrayList<String>> sourceParams;
 
     public DecisionTreeBuilder(List<Map<String, Object>> ds) {
-        sourceDataSet = ds;
+        sourceDataSet = ds; sourceParams = new HashMap<String, ArrayList<String>>();
         HashMap<String, ArrayList<String>> paramsDn = new HashMap<String, ArrayList<String>>();
 
         for(Map<String, Object> sourceData : sourceDataSet) {
             for(Map.Entry<String, Object> e : sourceData.entrySet()) {
                 String key = e.getKey(); Object value = e.getValue();
-                // if($k != "direction" AND $k != "partOfSpeech1" AND $k != "partOfSpeech2") $paramsdn[$k][] = $v;
                 if(!key.equals("direction")
                         && !key.equals("partOfSpeech1")
                         && !key.equals("partOfSpeech2")) {
@@ -82,14 +132,14 @@ public class DecisionTreeBuilder {
         HashMap<String, Double> gains = new HashMap<String, Double>();
 
         for(Map<String,Object>  data: dataSet) {
-            if((Integer) data.get("direction") == 0) left++;
+            if(((BigInteger) data.get("direction")).intValue() == 0) left++;
             else right++;
         }
 
         total = right + left;
-        entropy = countEntropy(left, right, total);
+        entropy = countEntropy(left, right);
 
-        if(left == 0 || right ==0) {
+        if(left == 0 || right == 0) {
             String val = (left == 0) ? Integer.toString(right) : Integer.toString(left);
             Node newNode = new Node(val, left, right);
             currNode.children.add(new Edge(newNode, currValue));
@@ -109,18 +159,23 @@ public class DecisionTreeBuilder {
                     counts.put(key, empty);
                 }
 
-                counts.get(key)[(Integer) data.get("direction")]++;
+                counts.get(key)[((BigInteger) data.get("direction")).intValue()]++;
             }
 
             int i = 0; double ent;
             gain = entropy;
             for(String v : paramValues) {
+                if(!counts.containsKey(i)) {
+                    Integer[] empty = {0,0};
+                    counts.put(i, empty);
+                }
+
                 int ttl = counts.get(i)[0] + counts.get(i)[1];
 
                 if(counts.get(i)[0] == 0 || counts.get(i)[1] == 0) ent = 0;
-                else ent = countEntropy(counts.get(i)[0], counts.get(i)[1], ttl);
+                else ent = countEntropy(counts.get(i)[0], counts.get(i)[1]);
 
-                gain -= ((ttl/total)*ent);
+                gain -= ((ttl/(double) total)*ent);
                 i++;
             }
             gains.put(paramName, gain);
@@ -160,13 +215,24 @@ public class DecisionTreeBuilder {
         params.remove(sel);
 
         for(int i = 0; i < currentParam.size(); i++) {
-            parseNode(newDataSet.get(i), params, newNode, currentParam.get(i));
+            if(!newDataSet.containsKey(i)) continue;
+            HashMap<String, ArrayList<String>> newParams = cloneParams(params);
+            parseNode(newDataSet.get(i), newParams, newNode, currentParam.get(i));
         }
 
         return this;
     }
 
-    private double countEntropy(int a, int b, int total) {
+    private HashMap<String, ArrayList<String>> cloneParams(HashMap<String, ArrayList<String>> params) {
+        HashMap<String, ArrayList<String>> newParams = new HashMap<String, ArrayList<String>>();
+        for (Map.Entry<String, ArrayList<String>> entry : params.entrySet()) {
+            newParams.put(entry.getKey(), entry.getValue());
+        }
+        return newParams;
+    }
+
+    private double countEntropy(int a, int b) {
+        double total = a + b;
         return ((-1)*(a/total)*(Math.log(a/total)/Math.log(2))) - ((b/total)*(Math.log(b/total)/Math.log(2)));
     }
 

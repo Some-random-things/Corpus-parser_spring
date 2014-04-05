@@ -1,4 +1,4 @@
-package com.imilkaeu.sprcrp;
+package com.imilkaeu.sprcrp.common;
 
 import org.apache.log4j.Logger;
 import org.springframework.core.io.FileSystemResource;

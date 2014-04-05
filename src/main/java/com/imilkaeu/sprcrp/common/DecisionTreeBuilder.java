@@ -1,4 +1,6 @@
-package com.imilkaeu.sprcrp;
+package com.imilkaeu.sprcrp.common;
+
+import com.imilkaeu.sprcrp.models.output.DecisionTreeNode;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -79,6 +81,27 @@ public class DecisionTreeBuilder {
 
         public void setValue(String value) {
             this.value = value;
+        }
+    }
+
+    public DecisionTreeNode convertForOutput() {
+        Node currentRoot = getRootNode();
+        DecisionTreeNode outputRoot = new DecisionTreeNode(currentRoot);
+        outputRoot.setName("Root Node");
+
+        addChildren(currentRoot, outputRoot);
+        return outputRoot;
+    }
+
+    private void addChildren(Node currentParent, DecisionTreeNode outputParent) {
+        for(Edge edge : currentParent.getChildren()) {
+            Node currentChild = edge.getEnd();
+            String name = currentParent.getName() + ": " + edge.getValue();
+
+            DecisionTreeNode outputChild = new DecisionTreeNode(name, currentChild.getLeft(), currentChild.getRight());
+            outputParent.addChild(outputChild);
+
+            addChildren(currentChild, outputChild);
         }
     }
 

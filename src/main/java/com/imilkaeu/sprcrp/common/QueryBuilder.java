@@ -1,4 +1,4 @@
-package com.imilkaeu.sprcrp;
+package com.imilkaeu.sprcrp.common;
 
 import com.imilkaeu.sprcrp.dao.MetaDAO;
 import com.imilkaeu.sprcrp.models.input.BigramInputData;

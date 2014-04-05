@@ -1,8 +1,8 @@
 package com.imilkaeu.sprcrp.dao;
 
-import com.imilkaeu.sprcrp.DecisionTreeBuilder;
-import com.imilkaeu.sprcrp.MetaHelper;
-import com.imilkaeu.sprcrp.QueryBuilder;
+import com.imilkaeu.sprcrp.common.DecisionTreeBuilder;
+import com.imilkaeu.sprcrp.common.MetaHelper;
+import com.imilkaeu.sprcrp.common.QueryBuilder;
 import com.imilkaeu.sprcrp.models.HashQuery;
 import com.imilkaeu.sprcrp.models.Word;
 import com.imilkaeu.sprcrp.models.input.BigramInputData;
@@ -126,8 +126,7 @@ public class WordDAO {
     }
 
     @Transactional
-    public DecisionTreeBuilder.Node getDecisionTreeVisualization(BigramCombination inputData) {
-        DecisionTreeNode root = new DecisionTreeNode();
+    public DecisionTreeNode getDecisionTreeVisualization(BigramCombination inputData) {
         Session session = sessionFactory.getCurrentSession();
 
         String queryString = QueryBuilder.buildDecisionTreeQuery(inputData, metaDAO);
@@ -135,9 +134,6 @@ public class WordDAO {
         query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
 
         List<Map<String,Object>> results = query.list();
-        DecisionTreeBuilder.Node rootNode = new DecisionTreeBuilder(results).startParse().getRootNode();
-        // convert here
-
-        return rootNode;
+        return new DecisionTreeBuilder(results).startParse().convertForOutput();
     }
 }

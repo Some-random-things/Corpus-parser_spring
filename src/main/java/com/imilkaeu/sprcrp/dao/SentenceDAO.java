@@ -1,6 +1,6 @@
 package com.imilkaeu.sprcrp.dao;
 
-import com.imilkaeu.sprcrp.QueryBuilder;
+import com.imilkaeu.sprcrp.common.QueryBuilder;
 import com.imilkaeu.sprcrp.models.output.Bigram;
 import com.imilkaeu.sprcrp.models.output.BigramCombination;
 import com.imilkaeu.sprcrp.models.output.OutputSentenceInfo;
